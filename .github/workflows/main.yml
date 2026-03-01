@@ -1,0 +1,21 @@
+name: K6 Performance Test
+
+on:
+  push:
+    branches: [ main ] # Se activa con cada commit a la rama main
+
+jobs:
+  performance_test:
+    name: Ejecución de Pruebas de Carga
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run k6 cloud test
+        uses: grafana/k6-action@v0.3.1
+        with:
+          filename: k6_pruebas.js
+          flags: --out cloud
+        env:
+          K6_CLOUD_TOKEN: ${{ secrets.K6_CLOUD_TOKEN }}
