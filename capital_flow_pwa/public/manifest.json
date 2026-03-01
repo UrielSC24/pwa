@@ -1,0 +1,16 @@
+{
+    "name": "Capital Flow - Horarios y Bandas",
+    "short_name": "CapitalFlow",
+    "description": "Gestiona tus horarios y descubre bandas del festival estilo Corona Capital.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#121212",
+    "theme_color": "#F5B700",
+    "icons": [
+        {
+            "src": "/icon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml"
+        }
+    ]
+}
