@@ -7,9 +7,11 @@ export const options = {
         { duration: '1m', target: 20 },  // Se mantiene 1 minuto
         { duration: '20s', target: 0 },  // Baja a 0
     ],
-    cloud: {
-        projectID: 6857910,
-        name: 'Prueba de Carga Capital Flow'
+    ext: {
+        loadimpact: {
+            projectID: 6857910,
+            name: 'Prueba de Carga Capital Flow'
+        }
     }
 };
 
