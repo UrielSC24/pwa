@@ -1,12 +1,33 @@
-name: K6 Performance Test
+name: K6 Performance Test and SonarQube Analysis
 
 on:
   push:
     branches: [ main ] # Se activa con cada commit a la rama main
 
 jobs:
+  # --- NUEVO JOB: ANÁLISIS DE SEGURIDAD (SONARQUBE) ---
+  Analysis-SAST:
+    name: Análisis SAST con SonarQube
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Necesario para un análisis preciso de SonarQube
+
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        with:
+          args: >
+            -Dsonar.projectKey=pwa
+
+  # --- TU JOB ACTUAL: PRUEBAS DE CARGA (K6) ---
   performance_test:
     name: Ejecución de Pruebas de Carga
+    needs: Analysis-SAST # Opcional: Esto hace que k6 solo corra si SonarQube pasa
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -17,6 +38,5 @@ jobs:
         with:
           filename: k6_pruebas.js
           flags: --out cloud
-          token: ${{ secrets.K6_CLOUD_TOKEN }}
         env:
           K6_CLOUD_TOKEN: ${{ secrets.K6_CLOUD_TOKEN }}
