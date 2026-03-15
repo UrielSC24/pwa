@@ -80,7 +80,7 @@ jobs:
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:main
           labels: ${{ steps.meta.outputs.labels }}
 
-  # --- JOB 4: DESPLIEGUE AUTOMÁTICO (CD) CORREGIDO ---
+# --- JOB 4: DESPLIEGUE AUTOMÁTICO (CD) ---
   deploy:
     name: Despliegue en Servidor Privado
     needs: build-and-push 
@@ -96,23 +96,21 @@ jobs:
           proxy_username: ${{ secrets.PROXY_USER }}
           proxy_key: ${{ secrets.PROXY_KEY }}
           script: |
-            # Forzar a SSH a no pedir confirmación de identidad
+            # 1. Configurar SSH para no pedir confirmación manual
             mkdir -p ~/.ssh
             echo "StrictHostKeyChecking no" >> ~/.ssh/config            
 
-            # Autenticarse en GHCR (usando sudo y minúsculas)
-            echo ${{ secrets.GITHUB_TOKEN }} | sudo docker login ghcr.io -u urielsc24 --password-stdin
+            # 2. Comandos siguiendo el estándar de la guía (SIN sudo)
+            echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u urielsc24 --password-stdin
             
-            # Detener y eliminar el contenedor anterior si existe (con sudo)
-            sudo docker stop my-node-app || true
-            sudo docker rm my-node-app || true
+            docker stop my-node-app || true
+            docker rm my-node-app || true
             
-            # Descargar la versión más reciente (en minúsculas)
-            sudo docker pull ghcr.io/urielsc24/pwa:main
+            docker pull ghcr.io/urielsc24/pwa:main
             
-            # Ejecutar el nuevo contenedor (con sudo)
-            sudo docker run -d \
+            # Mapeo al puerto 80 para acceso web directo [cite: 65]
+            docker run -d \
               --name my-node-app \
-              -p 3000:3000 \
+              -p 80:3000 \
               --restart always \
               ghcr.io/urielsc24/pwa:main
