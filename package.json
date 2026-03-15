@@ -1,0 +1,12 @@
+{
+  "name": "capital-flow-backend",
+  "version": "1.0.0",
+  "description": "Backend para Capital Flow",
+  "main": "capital_flow_backend/server.js",
+  "scripts": {
+    "start": "node capital_flow_backend/server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
