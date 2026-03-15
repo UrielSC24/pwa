@@ -97,6 +97,10 @@ jobs:
           proxy_username: ${{ secrets.PROXY_USER }}
           proxy_key: ${{ secrets.PROXY_KEY }}
           script: |
+            # Forzar a SSH a no pedir confirmación de identidad (evita errores de bot)
+            mkdir -p ~/.ssh
+            echo "StrictHostKeyChecking no" >> ~/.ssh/config            
+
             # Autenticarse en GHCR dentro del servidor
             echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
             
