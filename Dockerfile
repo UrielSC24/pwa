@@ -1,20 +1,20 @@
 # Usar una imagen base de Node.js ligera
 FROM node:18-alpine
 
-# Establecer el directorio de trabajo dentro del contenedor
+# Directorio de trabajo en el contenedor
 WORKDIR /app
 
-# Copiar los archivos de dependencias
-COPY package*.json ./
+# 1. Copiar SOLO los package.json de tu backend
+COPY capital_flow_backend/package*.json ./
 
-# Instalar las dependencias
+# 2. Instalar dependencias
 RUN npm install
 
-# Copiar el resto del código de la aplicación
-COPY . .
+# 3. Copiar el resto del código del backend
+COPY capital_flow_backend/ ./
 
-# Exponer el puerto que usará la aplicación (3000)
+# 4. Exponer el puerto (asegúrate de que tu backend use el 3000)
 EXPOSE 3000
 
-# Comando para iniciar la aplicación
+# 5. Iniciar la aplicación backend
 CMD ["npm", "start"]
